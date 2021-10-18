@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31808.319
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayZMachine", "PlayZMachine\PlayZMachine.csproj", "{DAC40CA4-F7BC-4946-BF11-18B7ED889504}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zmachine", "Z-Machine\Build1\zmachine\zmachine\zmachine.csproj", "{B8D61C79-30D9-4327-BB6D-5F33BE75E3F1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DAC40CA4-F7BC-4946-BF11-18B7ED889504}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAC40CA4-F7BC-4946-BF11-18B7ED889504}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAC40CA4-F7BC-4946-BF11-18B7ED889504}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAC40CA4-F7BC-4946-BF11-18B7ED889504}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8D61C79-30D9-4327-BB6D-5F33BE75E3F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8D61C79-30D9-4327-BB6D-5F33BE75E3F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8D61C79-30D9-4327-BB6D-5F33BE75E3F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8D61C79-30D9-4327-BB6D-5F33BE75E3F1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FCDED5CF-8544-4205-ABAA-F6325C5FCE22}
+	EndGlobalSection
+EndGlobal

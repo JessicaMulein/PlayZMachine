@@ -1,0 +1,3 @@
+[submodule "src/Z-Machine"]
+	path = src/Z-Machine
+	url = git@github.com:JessicaMulein/Z-Machine.git
