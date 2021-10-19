@@ -13,13 +13,14 @@ namespace PlayZMachine
 
         static async Task Main(string[] argv)
         {
-            var app = new CommandApp<IterateGameCommand>();
+            var app = new CommandApp();
             app.Configure(config =>
             {
 #if DEBUG
                 config.PropagateExceptions();
                 config.ValidateExamples();
 #endif
+                config.AddCommand<IterateGameCommand>("play");
             });
 
             // these memory states may be too long to tweet, so we may need to throw them in storage for a period of time and expire them
