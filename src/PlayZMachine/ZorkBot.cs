@@ -84,7 +84,7 @@
 
             (string file, string description) = this.Games[game];
 
-            TwitterIO io = new TwitterIO(initialInput: initialInput);
+            StaticIO io = new StaticIO(initialInput: initialInput);
             zmachine.Machine machine = (state is null)
                 ? new zmachine.Machine(
                     io: io,
@@ -94,7 +94,7 @@
                     initialState: state);
 
             machine.processInstruction();
-            
+
             throw new NotImplementedException();
         }
     }

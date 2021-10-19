@@ -1,11 +1,11 @@
 ﻿namespace PlayZMachine
 {
-    public class TwitterIO : zmachine.IIO
+    public class StaticIO : zmachine.IIO
     {
         private readonly StringReader inputReader;
         private readonly StringWriter outputWriter;
 
-        public TwitterIO(string initialInput)
+        public StaticIO(string initialInput)
         {
             this.inputReader = new StringReader(s: initialInput);
             this.outputWriter = new StringWriter();
@@ -45,7 +45,7 @@
                         array: ucase,
                         start: 0,
                         length: 1),
-                    ignoreCase: false);
+                    ignoreCase: true);
                 return new ConsoleKeyInfo(
                     keyChar: ucase[0],
                     key: console,

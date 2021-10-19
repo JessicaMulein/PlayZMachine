@@ -5,7 +5,7 @@ namespace PlayZMachine
     class Program
     {
         private static PlayZMachine.ZorkBot ZorkBot;
-        
+
         static Program()
         {
             ZorkBot = new PlayZMachine.ZorkBot();
