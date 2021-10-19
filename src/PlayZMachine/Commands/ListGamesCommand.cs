@@ -1,6 +1,6 @@
 ﻿using Spectre.Cli;
 
-namespace PlayZMachine
+namespace PlayZMachine.Commands
 {
     public class ListGamesCommand : Command
     {

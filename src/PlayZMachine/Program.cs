@@ -1,14 +1,17 @@
-﻿using Spectre.Cli;
-
-namespace PlayZMachine
+﻿namespace PlayZMachine
 {
+    using Spectre.Cli;
+
+    using PlayZMachine.Commands;
+    using PlayZMachine.Services;
+
     class Program
     {
-        private static PlayZMachine.ZorkBot ZorkBot;
+        private static ZorkBotService ZorkBot;
 
         static Program()
         {
-            ZorkBot = new PlayZMachine.ZorkBot();
+            ZorkBot = new ZorkBotService();
         }
 
         static async Task Main(string[] argv)

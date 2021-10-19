@@ -1,4 +1,4 @@
-﻿namespace PlayZMachine
+﻿namespace PlayZMachine.Services
 {
     using System;
     using System.Collections.Generic;
@@ -7,7 +7,7 @@
     using Tweetinvi.Models;
     using zmachine;
 
-    public class ZorkBot
+    public class ZorkBotService
     {
         private readonly TwitterClient userClient;
 
@@ -19,7 +19,7 @@
             { Game.Hitchhiker, ("hhgg2.z5", "Hitchhiker's Guide to the Galaxy") },
         };
 
-        public ZorkBot()
+        public ZorkBotService()
         {
             this.userClient = new TwitterClient(
                 consumerKey: "CONSUMER_KEY",
