@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Z-Machine\Build1\zmachine\zmachine\zmachine.csproj" />
+    <ProjectReference Include="..\Z-Machine\Build1\zmachine.Library\zmachine.Library.csproj" />
   </ItemGroup>
 
 </Project>

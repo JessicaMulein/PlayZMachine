@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayZMachine", "src\PlayZMa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zmachine", "src\Z-Machine\Build1\zmachine\zmachine\zmachine.csproj", "{B8D61C79-30D9-4327-BB6D-5F33BE75E3F1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zmachine.Library", "src\Z-Machine\Build1\zmachine.Library\zmachine.Library.csproj", "{C30BF57D-FD9B-4879-B0D9-0CCEED9DBBC6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{B8D61C79-30D9-4327-BB6D-5F33BE75E3F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8D61C79-30D9-4327-BB6D-5F33BE75E3F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8D61C79-30D9-4327-BB6D-5F33BE75E3F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C30BF57D-FD9B-4879-B0D9-0CCEED9DBBC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C30BF57D-FD9B-4879-B0D9-0CCEED9DBBC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C30BF57D-FD9B-4879-B0D9-0CCEED9DBBC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C30BF57D-FD9B-4879-B0D9-0CCEED9DBBC6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
