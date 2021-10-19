@@ -20,7 +20,16 @@ namespace PlayZMachine
                 config.PropagateExceptions();
                 config.ValidateExamples();
 #endif
-                config.AddCommand<IterateGameCommand>("play");
+                config
+                    .AddCommand<ListGamesCommand>("games")
+                    .WithAlias("g")
+                    .WithDescription("List games");
+
+                config
+                    .AddCommand<IterateGameCommand>("play")
+                    .WithAlias("p")
+                    .WithDescription("Play a game")
+                    .WithExample(new[] { "zork1" });
             });
 
             // these memory states may be too long to tweet, so we may need to throw them in storage for a period of time and expire them
