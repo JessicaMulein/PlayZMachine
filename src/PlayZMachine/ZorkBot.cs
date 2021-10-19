@@ -1,15 +1,10 @@
 ﻿namespace PlayZMachine
 {
-    using Tweetinvi;
-    using Tweetinvi.Client;
-    using Tweetinvi.Models;
     using System;
-    using System.IO;
     using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
+    using Tweetinvi;
+    using Tweetinvi.Models;
 
     public class ZorkBot
     {
@@ -28,7 +23,7 @@
             this.userClient = new TwitterClient(
                 consumerKey: "CONSUMER_KEY",
                 consumerSecret: "CONSUMER_SECRET",
-                accessToken: "ACCESS_TOKEN", 
+                accessToken: "ACCESS_TOKEN",
                 accessSecret: "ACCESS_TOKEN_SECRET");
         }
 
