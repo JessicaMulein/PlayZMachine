@@ -84,7 +84,7 @@
 
             (string file, string description) = this.Games[game];
 
-            StaticIO io = new StaticIO(initialInput: initialInput);
+            StaticIO io = new zmachine.StaticIO(initialInput: initialInput);
             zmachine.Machine machine = (state is null)
                 ? new zmachine.Machine(
                     io: io,
