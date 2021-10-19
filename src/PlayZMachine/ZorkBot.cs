@@ -12,10 +12,10 @@
 
         private IAuthenticatedUser? authenticatedUser;
 
-        private readonly IReadOnlyDictionary<string, (string, string)> Games = new Dictionary<string, (string, string)>()
+        private readonly IReadOnlyDictionary<Game, (string, string)> Games = new Dictionary<Game, (string, string)>()
         {
-            { "zork1", ("ZORK1.DAT", "Zork 1: The Final Underground") },
-            { "hhgg2", ("hhgg2.z5", "Hitchhiker's Guide to the Galaxy") },
+            { Game.Zork1, ("ZORK1.DAT", "Zork 1: The Final Underground") },
+            { Game.Hitchhiker, ("hhgg2.z5", "Hitchhiker's Guide to the Galaxy") },
         };
 
         public ZorkBot()
@@ -74,7 +74,7 @@
                 .ConfigureAwait(false);
         }
 
-        public async Task<string> Iterate(string game, string state)
+        public async Task<string> Iterate(Game game, string state, string initialInput, bool untilInput = true)
         {
             if (!this.Games.ContainsKey(game))
             {
@@ -83,16 +83,13 @@
 
             (string file, string description) = this.Games[game];
 
-            //ReadData("ZORK1.DAT");
-
-            //Memory memory = new Memory(128 * 1024); //128k main memory block
-            //memory.load("ZORK1.DAT");
-            //memory.dumpHeader();
             TwitterIO io = new TwitterIO(initialInput: "");
             zmachine.Machine machine = new zmachine.Machine(
                 io: io,
                 filename: file);
+
             machine.processInstruction();
+            
             throw new NotImplementedException();
         }
     }
