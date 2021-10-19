@@ -88,8 +88,10 @@
             //Memory memory = new Memory(128 * 1024); //128k main memory block
             //memory.load("ZORK1.DAT");
             //memory.dumpHeader();
-            TwitterIO io = new TwitterIO();
-            zmachine.Machine machine = new zmachine.Machine(io: io, filename: file);
+            TwitterIO io = new TwitterIO(initialInput: "");
+            zmachine.Machine machine = new zmachine.Machine(
+                io: io,
+                filename: file);
             machine.processInstruction();
             throw new NotImplementedException();
         }
