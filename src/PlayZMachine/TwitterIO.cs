@@ -36,12 +36,12 @@ namespace PlayZMachine
             return this.inputReader.ReadLine();
         }
 
-        public void Write(String str)
+        public void Write(string str)
         {
             this.outputWriter.WriteLine(str);
         }
 
-        public void WriteLine(String str)
+        public void WriteLine(string str)
         {
             this.outputWriter.Write(str);
         }
