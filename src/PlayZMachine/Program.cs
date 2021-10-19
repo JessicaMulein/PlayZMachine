@@ -1,9 +1,8 @@
 ﻿namespace PlayZMachine
 {
-    using Spectre.Cli;
-
     using PlayZMachine.Commands;
     using PlayZMachine.Services;
+    using Spectre.Cli;
     using Spectre.Console;
 
     class Program
