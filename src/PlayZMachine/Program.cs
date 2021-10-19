@@ -4,6 +4,7 @@
 
     using PlayZMachine.Commands;
     using PlayZMachine.Services;
+    using Spectre.Console;
 
     class Program
     {
@@ -34,6 +35,8 @@
                     .WithDescription("Play a game")
                     .WithExample(new[] { "zork1" });
             });
+
+            AnsiConsole.Markup("[underline red]Hello[/] World!");
 
             // these memory states may be too long to tweet, so we may need to throw them in storage for a period of time and expire them
             var output = await ZorkBot.Iterate(
