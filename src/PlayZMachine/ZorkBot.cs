@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using Tweetinvi;
     using Tweetinvi.Models;
+    using zmachine;
 
     public class ZorkBot
     {
@@ -74,19 +75,23 @@
                 .ConfigureAwait(false);
         }
 
-        public async Task<string> Iterate(Game game, string state, string initialInput, bool untilInput = true)
+        public async Task<string> Iterate(Game game, CPUState state, string initialInput, bool untilInput = true)
         {
             if (!this.Games.ContainsKey(game))
             {
-                return null;
+                throw new ArgumentException(nameof(game));
             }
 
             (string file, string description) = this.Games[game];
 
-            TwitterIO io = new TwitterIO(initialInput: "");
-            zmachine.Machine machine = new zmachine.Machine(
-                io: io,
-                filename: file);
+            TwitterIO io = new TwitterIO(initialInput: initialInput);
+            zmachine.Machine machine = (state is null)
+                ? new zmachine.Machine(
+                    io: io,
+                    programFilename: file)
+                : new zmachine.Machine(
+                    io: io,
+                    initialState: state);
 
             machine.processInstruction();
             
