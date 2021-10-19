@@ -65,7 +65,7 @@
                 .ConfigureAwait(false);
         }
 
-        public async Task Unsubscribe(string environment)
+        public async Task Unsubscribe(string environment = "sandbox")
         {
             if (this.authenticatedUser is null)
             {
@@ -74,7 +74,7 @@
 
             await this.userClient.AccountActivity
                 .UnsubscribeFromAccountActivityAsync(
-                    environment: "sandbox",
+                    environment: environment,
                     userId: this.authenticatedUser.Id)
                 .ConfigureAwait(false);
         }
@@ -93,17 +93,10 @@
             //Memory memory = new Memory(128 * 1024); //128k main memory block
             //memory.load("ZORK1.DAT");
             //memory.dumpHeader();
-            zmachine.Machine machine = new zmachine.Machine(file);
-
-            int numInstructionsProcessed = 0;
-            while (!machine.isFinished())
-            {
-                if (machine.debug)
-                    Debug.Write("" + numInstructionsProcessed + " : ");
-                machine.processInstruction();
-                ++numInstructionsProcessed;
-            }
-            Debug.WriteLine("Instructions processed: " + numInstructionsProcessed);
+            TwitterIO io = new TwitterIO();
+            zmachine.Machine machine = new zmachine.Machine(io: io, filename: file);
+            machine.processInstruction();
+            throw new NotImplementedException();
         }
     }
 }
