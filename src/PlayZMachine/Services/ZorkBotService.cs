@@ -21,7 +21,7 @@
 
         public ZorkBotService()
         {
-            this.userClient = new TwitterClient(
+            userClient = new TwitterClient(
                 consumerKey: "CONSUMER_KEY",
                 consumerSecret: "CONSUMER_SECRET",
                 accessToken: "ACCESS_TOKEN",
@@ -30,27 +30,27 @@
 
         public async Task<IAuthenticatedUser?> Login()
         {
-            this.authenticatedUser = await this.userClient.Users
+            authenticatedUser = await userClient.Users
                 .GetAuthenticatedUserAsync()
                 .ConfigureAwait(false);
-            return this.authenticatedUser;
+            return authenticatedUser;
         }
 
         public async Task<ITweet?> Tweet(string content)
         {
-            if (this.authenticatedUser is null)
+            if (authenticatedUser is null)
             {
                 throw new Exception("must be logged in");
             }
 
-            return await this.userClient.Tweets
+            return await userClient.Tweets
                 .PublishTweetAsync(content)
                 .ConfigureAwait(false);
         }
 
         public async Task Subscribe(string environment)
         {
-            if (this.authenticatedUser is null)
+            if (authenticatedUser is null)
             {
                 throw new Exception("must be logged in");
             }
@@ -63,26 +63,26 @@
 
         public async Task Unsubscribe(string environment = "sandbox")
         {
-            if (this.authenticatedUser is null)
+            if (authenticatedUser is null)
             {
                 throw new Exception("must be logged in");
             }
 
-            await this.userClient.AccountActivity
+            await userClient.AccountActivity
                 .UnsubscribeFromAccountActivityAsync(
                     environment: environment,
-                    userId: this.authenticatedUser.Id)
+                    userId: authenticatedUser.Id)
                 .ConfigureAwait(false);
         }
 
         public async Task<string> Iterate(Game game, CPUState state, string initialInput, bool untilInput = true)
         {
-            if (!this.Games.ContainsKey(game))
+            if (!Games.ContainsKey(game))
             {
                 throw new ArgumentException(nameof(game));
             }
 
-            (string file, string description) = this.Games[game];
+            (string file, string description) = Games[game];
 
             StaticIO io = new zmachine.StaticIO(initialInput: initialInput);
             zmachine.Machine machine = (state is null)

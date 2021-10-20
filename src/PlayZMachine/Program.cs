@@ -5,18 +5,18 @@
     using Spectre.Cli;
     using Spectre.Console;
 
-    class Program
+    internal class Program
     {
-        private static ZorkBotService ZorkBot;
+        private static readonly ZorkBotService ZorkBot;
 
         static Program()
         {
             ZorkBot = new ZorkBotService();
         }
 
-        static async Task Main(string[] argv)
+        private static async Task Main(string[] argv)
         {
-            var app = new CommandApp();
+            CommandApp? app = new CommandApp();
             app.Configure(config =>
             {
 #if DEBUG
@@ -38,7 +38,7 @@
             AnsiConsole.Markup("[underline red]Hello[/] World!");
 
             // these memory states may be too long to tweet, so we may need to throw them in storage for a period of time and expire them
-            var output = await ZorkBot.Iterate(
+            string? output = await ZorkBot.Iterate(
                 game: Game.Zork1,
                 state: null,
                 initialInput: "",
