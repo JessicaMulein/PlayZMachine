@@ -5,7 +5,7 @@
     using System.Threading.Tasks;
     using Tweetinvi;
     using Tweetinvi.Models;
-    using zmachine;
+    using zmachine.Library;
 
     public class ZorkBotService
     {
@@ -75,7 +75,7 @@
                 .ConfigureAwait(false);
         }
 
-        public async Task<string> Iterate(Game game, CPUState state, string initialInput, bool untilInput = true)
+        public async Task<string> Iterate(Game game, CPUState? state, string? initialInput = null, bool untilInput = true)
         {
             if (!Games.ContainsKey(game))
             {
@@ -84,12 +84,12 @@
 
             (string file, string description) = Games[game];
 
-            StaticIO io = new zmachine.StaticIO(initialInput: initialInput);
-            zmachine.Machine machine = (state is null)
-                ? new zmachine.Machine(
+            StaticIO io = new StaticIO(initialInput: initialInput);
+            Machine machine = (state is null)
+                ? new Machine(
                     io: io,
                     programFilename: file)
-                : new zmachine.Machine(
+                : new Machine(
                     io: io,
                     initialState: state);
 
