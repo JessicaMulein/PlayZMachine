@@ -25,7 +25,6 @@ namespace PlayZMachine.Commands
             }
             var gameFile = AnsiConsole.Prompt<string>(prompt: prompt);
 
-            int numInstructionsProcessed = 0;
             AnsiConsole.Status()
                 .Start(status: $"[grey]SELECTED:[/] {gameFile}", ctx =>
                 {
@@ -44,15 +43,14 @@ namespace PlayZMachine.Commands
                     {
                         if (machine.DebugEnabled)
                         {
-                            Debug.Write("" + numInstructionsProcessed + " : ");
+                            Debug.Write("" + machine.InstructionCounter + " : ");
                         }
 
-                        ctx.Status($"i:{numInstructionsProcessed}> ");
+                        ctx.Status($"i:{machine.InstructionCounter}> ");
                         machine.processInstruction();
-                        ++numInstructionsProcessed;
                     }
 
-                    Debug.WriteLine("Instructions processed: " + numInstructionsProcessed);
+                    Debug.WriteLine("Instructions processed: " + machine.InstructionCounter);
                 });
 
             return 0;
