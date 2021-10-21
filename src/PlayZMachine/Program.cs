@@ -2,7 +2,7 @@
 {
     using PlayZMachine.Commands;
     using PlayZMachine.Services;
-    using Spectre.Cli;
+    using Spectre.Console.Cli;
     using Spectre.Console;
 
     internal class Program
@@ -37,11 +37,8 @@
 
             AnsiConsole.MarkupLine("[underline red]ZorkBot[/] Welcome to an implementation of the Infocom Z-machine based largely on Mark's!");
             // these memory states may be too long to tweet, so we may need to throw them in storage for a period of time and expire them
-            string? output = await ZorkBot.Iterate(
-                game: Game.Zork1,
-                state: null,
-                initialInput: "",
-                untilInput: true);
+            await app.RunAsync(args: new string[] { });
+            return;
         }
     }
 }
