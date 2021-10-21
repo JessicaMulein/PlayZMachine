@@ -29,7 +29,7 @@ namespace PlayZMachine.Commands
             ConsoleIO io = new ConsoleIO();
             Machine machine = new Machine(
                 io: io,
-                programFilename: gameFile);
+                programFilename: Path.Combine(Directory.GetCurrentDirectory(), gameFile));
 
             int numInstructionsProcessed = 0;
             while (!machine.Finished)

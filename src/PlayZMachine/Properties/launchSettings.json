@@ -2,7 +2,8 @@
   "profiles": {
     "PlayZMachine": {
       "commandName": "Project",
-      "commandLineArgs": "games"
+      "commandLineArgs": "local",
+      "workingDirectory": "C:\\s\\PlayZMachine\\src\\PlayZMachine"
     }
   }
 }
