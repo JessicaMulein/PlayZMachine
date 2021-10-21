@@ -24,6 +24,11 @@
                 config.ValidateExamples();
 #endif
                 config
+                    .AddCommand<LogWatchCommand>("watch")
+                    .WithAlias("w")
+                    .WithDescription("Continuous log monitoring of the Twitter Bot");
+
+                config
                     .AddCommand<ListGamesCommand>("games")
                     .WithAlias("g")
                     .WithDescription("List games");
@@ -40,7 +45,7 @@
             AnsiConsole.MarkupLine(" [red]-[/] [blue]Local Game[/]");
             AnsiConsole.MarkupLine(" [red]-[/] [purple]Admin Console[/]");
             AnsiConsole.MarkupLine("---------------------------------------------------------------------------");
-
+            
             // these memory states may be too long to tweet, so we may need to throw them in storage for a period of time and expire them
             await app.RunAsync(args: args);
             return;

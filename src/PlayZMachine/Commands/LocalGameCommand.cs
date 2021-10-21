@@ -24,25 +24,36 @@ namespace PlayZMachine.Commands
                 var choice = prompt.AddChoice(GameMap.Map[gameValue].Item1);
             }
             var gameFile = AnsiConsole.Prompt<string>(prompt: prompt);
-            AnsiConsole.MarkupLine($"[grey]SELECTED:[/] {gameFile}");
-
-            ConsoleIO io = new ConsoleIO();
-            Machine machine = new Machine(
-                io: io,
-                programFilename: Path.Combine(Directory.GetCurrentDirectory(), gameFile));
 
             int numInstructionsProcessed = 0;
-            while (!machine.Finished)
-            {
-                if (machine.DebugEnabled)
+            AnsiConsole.Status()
+                .Start(status: $"[grey]SELECTED:[/] {gameFile}", ctx =>
                 {
-                    Debug.Write("" + numInstructionsProcessed + " : ");
-                }
+                    ctx.Spinner(Spinner.Known.Dots8Bit);
+                    ctx.SpinnerStyle(Style.Parse("yellow"));
 
-                machine.processInstruction();
-                ++numInstructionsProcessed;
-            }
-            Debug.WriteLine("Instructions processed: " + numInstructionsProcessed);
+                    ConsoleIO io = new ConsoleIO();
+                    Machine machine = new Machine(
+                        io: io,
+                        programFilename: Path.Combine(Directory.GetCurrentDirectory(), gameFile));
+
+                    ctx.SpinnerStyle(Style.Parse("green"));
+                    ctx.Status("Data loaded");
+
+                    while (!machine.Finished)
+                    {
+                        if (machine.DebugEnabled)
+                        {
+                            Debug.Write("" + numInstructionsProcessed + " : ");
+                        }
+
+                        ctx.Status($"i:{numInstructionsProcessed}> ");
+                        machine.processInstruction();
+                        ++numInstructionsProcessed;
+                    }
+
+                    Debug.WriteLine("Instructions processed: " + numInstructionsProcessed);
+                });
 
             return 0;
         }
