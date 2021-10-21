@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PlayZMachine": {
+      "commandName": "Project",
+      "commandLineArgs": "games"
+    }
+  }
+}

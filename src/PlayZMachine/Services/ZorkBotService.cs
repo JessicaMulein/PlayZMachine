@@ -1,5 +1,6 @@
 ﻿namespace PlayZMachine.Services
 {
+    using PlayZMachine.Maps;
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -13,11 +14,7 @@
 
         private IAuthenticatedUser? authenticatedUser;
 
-        private readonly IReadOnlyDictionary<Game, (string, string)> Games = new Dictionary<Game, (string, string)>()
-        {
-            { Game.Zork1, ("ZORK1.DAT", "Zork 1: The Final Underground") },
-            { Game.Hitchhiker, ("hhgg2.z5", "Hitchhiker's Guide to the Galaxy") },
-        };
+        
 
         public ZorkBotService()
         {
@@ -77,12 +74,12 @@
 
         public async Task<string> Iterate(Game game, CPUState? state, string? initialInput = null, bool untilInput = true)
         {
-            if (!Games.ContainsKey(game))
+            if (!GameMap.Map.ContainsKey(game))
             {
                 throw new ArgumentException(nameof(game));
             }
 
-            (string file, string description) = Games[game];
+            (string file, string description) = GameMap.Map[game];
 
             StaticIO io = new StaticIO(initialInput: initialInput);
             Machine machine = (state is null)

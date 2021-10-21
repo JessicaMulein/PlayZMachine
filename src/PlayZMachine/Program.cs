@@ -14,7 +14,7 @@
             ZorkBot = new ZorkBotService();
         }
 
-        private static async Task Main(string[] argv)
+        private static async Task Main(string[] args)
         {
             CommandApp? app = new CommandApp();
             app.Configure(config =>
@@ -29,15 +29,20 @@
                     .WithDescription("List games");
 
                 config
-                    .AddCommand<IterateGameCommand>("play")
-                    .WithAlias("p")
-                    .WithDescription("Play a game")
-                    .WithExample(new[] { "zork1" });
+                    .AddCommand<LocalGameCommand>("local")
+                    .WithAlias("l")
+                    .WithDescription("Play a game locally");
             });
 
+            AnsiConsole.MarkupLine("");
             AnsiConsole.MarkupLine("[underline red]ZorkBot[/] Welcome to an implementation of the Infocom Z-machine based largely on Mark's!");
+            AnsiConsole.MarkupLine(" [red]-[/] [green]Background Twitter Bot[/]");
+            AnsiConsole.MarkupLine(" [red]-[/] [blue]Local Game[/]");
+            AnsiConsole.MarkupLine(" [red]-[/] [purple]Admin Console[/]");
+            AnsiConsole.MarkupLine("---------------------------------------------------------------------------");
+
             // these memory states may be too long to tweet, so we may need to throw them in storage for a period of time and expire them
-            await app.RunAsync(args: new string[] { });
+            await app.RunAsync(args: args);
             return;
         }
     }
