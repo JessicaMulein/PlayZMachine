@@ -7,6 +7,8 @@ namespace PlayZMachine.Commands
     using static Spectre.Console.SelectionPromptExtensions;
     using zmachine.Library;
     using System.Diagnostics;
+    using PlayZMachine.ConsoleInterfaces;
+    using zmachine.Library.Enumerations;
 
     public class LocalGameCommand : Command
     {
@@ -25,33 +27,58 @@ namespace PlayZMachine.Commands
             }
             var gameFile = AnsiConsole.Prompt<string>(prompt: prompt);
 
-            AnsiConsole.Status()
-                .Start(status: $"[grey]SELECTED:[/] {gameFile}", ctx =>
-                {
-                    ctx.Spinner(Spinner.Known.Dots8Bit);
-                    ctx.SpinnerStyle(Style.Parse("yellow"));
+            AnsiConsoleIO io = new AnsiConsoleIO();
+            Machine machine = new Machine(
+                io: io,
+                programFilename: Path.Combine(Directory.GetCurrentDirectory(), gameFile));
+            machine.BreakOn.Add(zmachine.Library.Enumerations.BreakpointType.InputRequired);
+            machine.BreakOn.Add(zmachine.Library.Enumerations.BreakpointType.Terminate);
 
-                    ConsoleIO io = new ConsoleIO();
-                    Machine machine = new Machine(
-                        io: io,
-                        programFilename: Path.Combine(Directory.GetCurrentDirectory(), gameFile));
-
-                    ctx.SpinnerStyle(Style.Parse("green"));
-                    ctx.Status("Data loaded");
-
-                    while (!machine.Finished)
+            BreakpointType breakpoint = BreakpointType.None;
+            while (breakpoint != BreakpointType.Terminate)
+            {
+                AnsiConsole.Status()
+                    .Start(status: $"[grey]SELECTED:[/] {gameFile}", ctx =>
                     {
-                        if (machine.DebugEnabled)
+                        ctx.Spinner(Spinner.Known.Dots8Bit);
+                        ctx.SpinnerStyle(Style.Parse("yellow"));
+
+
+                        ctx.SpinnerStyle(Style.Parse("green"));
+                        ctx.Status("Data loaded");
+
+                        while (!machine.Finished)
                         {
-                            Debug.Write("" + machine.InstructionCounter + " : ");
+                            machine.DebugWrite("" + machine.InstructionCounter + " : ");
+
+                            ctx.Status($"i:{machine.InstructionCounter}> ");
+                            breakpoint = machine.processInstruction();
                         }
 
-                        ctx.Status($"i:{machine.InstructionCounter}> ");
-                        machine.processInstruction();
-                    }
+                        if (breakpoint != BreakpointType.None)
+                        {
+                            machine.DebugWrite($"Breakpoint reached: {breakpoint}");
+                        }
 
-                    Debug.WriteLine("Instructions processed: " + machine.InstructionCounter);
-                });
+                        machine.DebugWrite("Instructions processed: " + machine.InstructionCounter);
+                    });
+
+                switch (breakpoint)
+                {
+                    case BreakpointType.None:
+                        // resume normal operation
+                        break;
+                    case BreakpointType.InputRequired:
+                        machine.DebugWrite("Input Breakpoint encountered.");
+                        // re process the input instruction, skipping the input break
+                        machine.BreakAfter = machine.InstructionCounter + 1;
+                        breakpoint = machine.processInstruction();
+                        break;
+                    case BreakpointType.Terminate:
+                        machine.DebugWrite("Terminate breakpoint encountered.");
+                        return 1;
+                }
+            }
 
             return 0;
         }

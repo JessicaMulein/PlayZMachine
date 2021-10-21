@@ -16,7 +16,7 @@
         }
         public void Write(string str)
         {
-            AnsiConsole.Markup(str); // write/writeline came reversed in the fork.... -JM
+            AnsiConsole.Markup(str);
         }
         public void WriteLine(string str)
         {
