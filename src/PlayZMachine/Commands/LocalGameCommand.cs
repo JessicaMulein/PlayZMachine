@@ -5,6 +5,8 @@ namespace PlayZMachine.Commands
     using Spectre.Console.Cli;
     using PlayZMachine.Maps;
     using static Spectre.Console.SelectionPromptExtensions;
+    using zmachine.Library;
+    using System.Diagnostics;
 
     public class LocalGameCommand : Command
     {
@@ -21,8 +23,27 @@ namespace PlayZMachine.Commands
             {
                 var choice = prompt.AddChoice(GameMap.Map[gameValue].Item1);
             }
-            var game = AnsiConsole.Prompt<string>(prompt: prompt);
-            AnsiConsole.MarkupLine($"[grey]SELECTED:[/] {game}");
+            var gameFile = AnsiConsole.Prompt<string>(prompt: prompt);
+            AnsiConsole.MarkupLine($"[grey]SELECTED:[/] {gameFile}");
+
+            ConsoleIO io = new ConsoleIO();
+            Machine machine = new Machine(
+                io: io,
+                programFilename: gameFile);
+
+            int numInstructionsProcessed = 0;
+            while (!machine.Finished)
+            {
+                if (machine.DebugEnabled)
+                {
+                    Debug.Write("" + numInstructionsProcessed + " : ");
+                }
+
+                machine.processInstruction();
+                ++numInstructionsProcessed;
+            }
+            Debug.WriteLine("Instructions processed: " + numInstructionsProcessed);
+
             return 0;
         }
     }

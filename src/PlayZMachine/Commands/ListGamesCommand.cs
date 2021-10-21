@@ -11,7 +11,6 @@ namespace PlayZMachine.Commands
         {
             AnsiConsole.MarkupLine("");
             AnsiConsole.MarkupLine("[green]GAMES[/][red]:[/]");
-            AnsiConsole.MarkupLine("");
             int startingIndex = 6;
             string[] colors = new string[] { "red", "orange", "yellow" , "green", "blue", "indigo", "violet" };
             string[] gameFiles = GameMap.Map.Values.Select(pair => pair.Item1).ToArray();
