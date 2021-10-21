@@ -53,14 +53,12 @@ namespace PlayZMachine.Commands
 
                             ctx.Status($"i:{machine.InstructionCounter}> ");
                             breakpoint = machine.processInstruction();
+                            if (breakpoint != BreakpointType.None)
+                            {
+                                machine.DebugWrite($"Breakpoint reached: {breakpoint}");
+                                break;
+                            }
                         }
-
-                        if (breakpoint != BreakpointType.None)
-                        {
-                            machine.DebugWrite($"Breakpoint reached: {breakpoint}");
-                        }
-
-                        machine.DebugWrite("Instructions processed: " + machine.InstructionCounter);
                     });
 
                 switch (breakpoint)
@@ -70,7 +68,7 @@ namespace PlayZMachine.Commands
                         break;
                     case BreakpointType.InputRequired:
                         machine.DebugWrite("Input Breakpoint encountered.");
-                        // re process the input instruction, skipping the input break
+                        // re process the input instruction, skipping the input break, allowing the single input operation 
                         machine.BreakAfter = machine.InstructionCounter + 1;
                         breakpoint = machine.processInstruction();
                         break;
