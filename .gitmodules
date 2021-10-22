@@ -1,3 +1,6 @@
 [submodule "src/Z-Machine"]
 	path = src/Z-Machine
 	url = git@github.com:JessicaMulein/Z-Machine.git
+[submodule "resources/zmachine"]
+	path = resources/zmachine
+	url = git@github.com:jeffnyman/zmachine.git
