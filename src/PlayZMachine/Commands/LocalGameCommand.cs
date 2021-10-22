@@ -31,10 +31,10 @@ namespace PlayZMachine.Commands
             Machine machine = new Machine(
                 io: io,
                 programFilename: Path.Combine(Directory.GetCurrentDirectory(), gameFile),
-                breakpointTypes: new BreakpointType[] { BreakpointType.Terminate, BreakpointType.Complete });
+                breakpointTypes: new BreakpointType[] { });
+
             BreakpointType breakpointEncountered = BreakpointType.None;
-            var encounteredEnd = new BreakpointType[] { BreakpointType.Terminate, BreakpointType.Complete }.Contains(breakpointEncountered);
-            while (!machine.Finished && !encounteredEnd)
+            while (!machine.Finished)
             {
                 machine.DebugWrite("" + machine.InstructionCounter + " : ");
 
