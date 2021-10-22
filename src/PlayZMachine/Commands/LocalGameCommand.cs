@@ -30,13 +30,12 @@ namespace PlayZMachine.Commands
             AnsiConsoleIO io = new AnsiConsoleIO();
             Machine machine = new Machine(
                 io: io,
-                programFilename: Path.Combine(Directory.GetCurrentDirectory(), gameFile));
-            machine.BreakOn.Add(zmachine.Library.Enumerations.BreakpointType.InputRequired);
-            machine.BreakOn.Add(zmachine.Library.Enumerations.BreakpointType.Terminate);
-
+                programFilename: Path.Combine(Directory.GetCurrentDirectory(), gameFile),
+                breakpointTypes: new BreakpointType[] { BreakpointType.InputRequired, BreakpointType.Terminate });
             BreakpointType breakpoint = BreakpointType.None;
-            while (breakpoint != BreakpointType.Terminate)
+            while (!machine.Finished && (breakpoint != BreakpointType.Terminate))
             {
+                // primarily stay in the status log
                 AnsiConsole.Status()
                     .Start(status: $"[grey]SELECTED:[/] {gameFile}", ctx =>
                     {
@@ -56,26 +55,34 @@ namespace PlayZMachine.Commands
                             if (breakpoint != BreakpointType.None)
                             {
                                 machine.DebugWrite($"Breakpoint reached: {breakpoint}");
+                                // this may be an InputRequired for example
+                                // drop out of the loop to evaluate it
                                 break;
                             }
                         }
                     });
 
+                // dropped out due to input required, breakpoint (future), or termination
                 switch (breakpoint)
                 {
                     case BreakpointType.None:
-                        // resume normal operation
+                        // no break occurred, resume normal operation
                         break;
                     case BreakpointType.InputRequired:
                         machine.DebugWrite("Input Breakpoint encountered.");
                         // re process the input instruction, skipping the input break, allowing the single input operation 
-                        machine.BreakAfter = machine.InstructionCounter + 1;
+                        // basically disable breaking until at least this instruction
+                        machine.BreakAfter = Math.Max(
+                            machine.BreakAfter,
+                            machine.InstructionCounter + 1);
                         breakpoint = machine.processInstruction();
                         break;
                     case BreakpointType.Terminate:
-                        machine.DebugWrite("Terminate breakpoint encountered.");
+                        machine.DebugWrite("Terminate Breakpoint encountered.");
                         return 1;
                 }
+
+                // resume loop normally
             }
 
             return 0;
