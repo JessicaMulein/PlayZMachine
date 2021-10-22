@@ -23,7 +23,11 @@ namespace PlayZMachine.Commands
                     .MoreChoicesText("[grey](Move up and down to reveal more games)[/]");
             foreach (Game gameValue in Enum.GetValues(typeof(Game)))
             {
-                var choice = prompt.AddChoice(GameMap.Map[gameValue].Item1);
+                if (!GameMap.Map.ContainsKey(gameValue) || GameMap.Map[gameValue].zmachineVersion > Machine.CurrentVersion)
+                {
+                    continue;
+                }
+                var choice = prompt.AddChoice(GameMap.Map[gameValue].fileName);
             }
             var gameFile = AnsiConsole.Prompt<string>(prompt: prompt);
 

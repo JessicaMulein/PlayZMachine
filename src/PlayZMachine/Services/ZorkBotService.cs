@@ -79,13 +79,13 @@
                 throw new ArgumentException(nameof(game));
             }
 
-            (string file, string description) = GameMap.Map[game];
+            (string fileName, string description, int zmachineVersion) = GameMap.Map[game];
 
             StaticIO io = new StaticIO(initialInput: initialInput);
             Machine machine = (state is null)
                 ? new Machine(
                     io: io,
-                    programFilename: file)
+                    programFilename: fileName)
                 : new Machine(
                     io: io,
                     initialState: state);

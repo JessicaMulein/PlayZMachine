@@ -4,6 +4,7 @@ namespace PlayZMachine.Commands
     using PlayZMachine.Maps;
     using Spectre.Console;
     using Spectre.Console.Cli;
+    using zmachine.Library;
 
     public class ListGamesCommand : Command
     {
@@ -18,7 +19,16 @@ namespace PlayZMachine.Commands
             int longestGameName = Enum.GetNames(typeof(Game)).Select(gameName => gameName.Length).Max();
             foreach (var pair in GameMap.Map)
             {
-                AnsiConsole.MarkupLine(String.Format(" [{0}]- {1}[/] > {2} : {3}", colors[startingIndex], pair.Value.Item1.ToString().PadRight(longestGameFile), pair.Key.ToString().PadRight(longestGameName), pair.Value.Item2));
+                if (!GameMap.Map.ContainsKey(pair.Key) || pair.Value.zmachineVersion > Machine.CurrentVersion)
+                {
+                    continue;
+                }
+                AnsiConsole.MarkupLine(String.Format(" [{0}]- {1}[/] > {2} : {3}",
+                    colors[startingIndex],
+                    pair.Value.fileName.ToString().PadRight(longestGameFile),
+                    pair.Key.ToString().PadRight(longestGameName),
+                    pair.Value.description));
+
                 startingIndex = (startingIndex + 1) % colors.Length;
             }
             return 0;
