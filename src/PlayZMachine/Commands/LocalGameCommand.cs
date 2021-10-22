@@ -31,9 +31,10 @@ namespace PlayZMachine.Commands
             Machine machine = new Machine(
                 io: io,
                 programFilename: Path.Combine(Directory.GetCurrentDirectory(), gameFile),
-                breakpointTypes: new BreakpointType[] { BreakpointType.Terminate });
+                breakpointTypes: new BreakpointType[] { BreakpointType.Terminate, BreakpointType.Complete });
             BreakpointType breakpointEncountered = BreakpointType.None;
-            while (!machine.Finished && (breakpointEncountered != BreakpointType.Terminate))
+            var encounteredEnd = new BreakpointType[] { BreakpointType.Terminate, BreakpointType.Complete }.Contains(breakpointEncountered);
+            while (!machine.Finished && !encounteredEnd)
             {
                 machine.DebugWrite("" + machine.InstructionCounter + " : ");
 
@@ -56,7 +57,9 @@ namespace PlayZMachine.Commands
                 case BreakpointType.InputRequired:
                     // previously this was used to break out of a status loop, but we should not be breaking for input any longer
                     machine.IO.WriteLine("Input required breakpoint reached unexpectedly");
-                    return 3;
+                    return 4;
+                case BreakpointType.Complete:
+                    return 0;
                 case BreakpointType.Terminate:
                     machine.DebugWrite("Terminate Breakpoint encountered.");
                     return 2;
