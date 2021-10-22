@@ -2,8 +2,8 @@
 {
     using PlayZMachine.Commands;
     using PlayZMachine.Services;
-    using Spectre.Console.Cli;
     using Spectre.Console;
+    using Spectre.Console.Cli;
 
     internal class Program
     {
@@ -45,7 +45,7 @@
             AnsiConsole.MarkupLine(" [red]-[/] [blue]Local Game[/]");
             AnsiConsole.MarkupLine(" [red]-[/] [purple]Admin Console[/]");
             AnsiConsole.MarkupLine("---------------------------------------------------------------------------");
-            
+
             // these memory states may be too long to tweet, so we may need to throw them in storage for a period of time and expire them
             await app.RunAsync(args: args);
             return;

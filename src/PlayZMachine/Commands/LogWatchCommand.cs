@@ -15,7 +15,7 @@ namespace PlayZMachine.Commands
                     ctx.Spinner(Spinner.Known.Dots8Bit);
                     ctx.SpinnerStyle(Style.Parse("yellow"));
 
-                    while(true)
+                    while (true)
                     {
                         Thread.Sleep(1000);
                         DateTime date = DateTime.Now;

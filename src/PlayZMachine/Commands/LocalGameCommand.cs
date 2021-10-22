@@ -1,14 +1,13 @@
 ﻿
 namespace PlayZMachine.Commands
 {
+    using PlayZMachine.ConsoleInterfaces;
+    using PlayZMachine.Maps;
     using Spectre.Console;
     using Spectre.Console.Cli;
-    using PlayZMachine.Maps;
-    using static Spectre.Console.SelectionPromptExtensions;
     using zmachine.Library;
-    using System.Diagnostics;
-    using PlayZMachine.ConsoleInterfaces;
     using zmachine.Library.Enumerations;
+    using static Spectre.Console.SelectionPromptExtensions;
 
     public class LocalGameCommand : Command
     {
@@ -16,7 +15,7 @@ namespace PlayZMachine.Commands
         {
             AnsiConsole.MarkupLine("[underline red]ZorkBot[/] Welcome to an implementation of the Infocom Z-machine based largely on Mark's!");
 
-            var prompt = new SelectionPrompt<string>();
+            SelectionPrompt<string>? prompt = new SelectionPrompt<string>();
             prompt
                     .Title("Games [green]available[/]?")
                     .PageSize(10)
@@ -27,9 +26,9 @@ namespace PlayZMachine.Commands
                 {
                     continue;
                 }
-                var choice = prompt.AddChoice(GameMap.Map[gameValue].fileName);
+                ISelectionItem<string>? choice = prompt.AddChoice(GameMap.Map[gameValue].fileName);
             }
-            var gameFile = AnsiConsole.Prompt<string>(prompt: prompt);
+            string? gameFile = AnsiConsole.Prompt<string>(prompt: prompt);
 
             AnsiConsoleIO io = new AnsiConsoleIO();
             Machine machine = new Machine(
@@ -46,8 +45,6 @@ namespace PlayZMachine.Commands
                 if (breakpointEncountered != BreakpointType.None)
                 {
                     machine.DebugWrite($"Breakpoint reached: {breakpointEncountered}");
-                    // this may be an InputRequired for example
-                    // drop out of the loop to evaluate it
                     break;
                 }
             }
@@ -56,14 +53,14 @@ namespace PlayZMachine.Commands
             switch (breakpointEncountered)
             {
                 case BreakpointType.None:
-                    // no break occurred, resume normal operation
+                    // no break occurred
+                    return 0;
+                case BreakpointType.Complete:
                     return 0;
                 case BreakpointType.InputRequired:
                     // previously this was used to break out of a status loop, but we should not be breaking for input any longer
                     machine.IO.WriteLine("Input required breakpoint reached unexpectedly");
                     return 4;
-                case BreakpointType.Complete:
-                    return 0;
                 case BreakpointType.Terminate:
                     machine.DebugWrite("Terminate Breakpoint encountered.");
                     return 2;
