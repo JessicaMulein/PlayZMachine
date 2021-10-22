@@ -31,61 +31,40 @@ namespace PlayZMachine.Commands
             Machine machine = new Machine(
                 io: io,
                 programFilename: Path.Combine(Directory.GetCurrentDirectory(), gameFile),
-                breakpointTypes: new BreakpointType[] { BreakpointType.InputRequired, BreakpointType.Terminate });
+                breakpointTypes: new BreakpointType[] { BreakpointType.Terminate });
             BreakpointType breakpointEncountered = BreakpointType.None;
             while (!machine.Finished && (breakpointEncountered != BreakpointType.Terminate))
             {
-                // primarily stay in the status log
-                AnsiConsole.Status()
-                    .Start(status: $"[grey]SELECTED:[/] {gameFile}", ctx =>
-                    {
-                        ctx.Spinner(Spinner.Known.Dots8Bit);
-                        ctx.SpinnerStyle(Style.Parse("yellow"));
+                machine.DebugWrite("" + machine.InstructionCounter + " : ");
 
-
-                        ctx.SpinnerStyle(Style.Parse("green"));
-                        ctx.Status("Data loaded");
-
-                        while (!machine.Finished)
-                        {
-                            machine.DebugWrite("" + machine.InstructionCounter + " : ");
-
-                            ctx.Status($"i:{machine.InstructionCounter}> ");
-                            breakpointEncountered = machine.processInstruction();
-                            if (breakpointEncountered != BreakpointType.None)
-                            {
-                                machine.DebugWrite($"Breakpoint reached: {breakpointEncountered}");
-                                // this may be an InputRequired for example
-                                // drop out of the loop to evaluate it
-                                break;
-                            }
-                        }
-                    });
-
-                // dropped out due to input required, breakpoint (future), or termination
-                switch (breakpointEncountered)
+                breakpointEncountered = machine.processInstruction();
+                if (breakpointEncountered != BreakpointType.None)
                 {
-                    case BreakpointType.None:
-                        // no break occurred, resume normal operation
-                        break;
-                    case BreakpointType.InputRequired:
-                        machine.DebugWrite("Input Breakpoint encountered.");
-                        // re process the input instruction, skipping the input break, allowing the single input operation 
-                        // basically disable breaking until at least this instruction
-                        machine.BreakAfter = Math.Max(
-                            machine.BreakAfter,
-                            machine.InstructionCounter + 1);
-                        breakpointEncountered = machine.processInstruction();
-                        break;
-                    case BreakpointType.Terminate:
-                        machine.DebugWrite("Terminate Breakpoint encountered.");
-                        return 1;
+                    machine.DebugWrite($"Breakpoint reached: {breakpointEncountered}");
+                    // this may be an InputRequired for example
+                    // drop out of the loop to evaluate it
+                    break;
                 }
-
-                // resume loop normally
             }
 
-            return 0;
+            // dropped out due breakpoint or termination
+            switch (breakpointEncountered)
+            {
+                case BreakpointType.None:
+                    // no break occurred, resume normal operation
+                    return 0;
+                case BreakpointType.InputRequired:
+                    // previously this was used to break out of a status loop, but we should not be breaking for input any longer
+                    machine.IO.WriteLine("Input required breakpoint reached unexpectedly");
+                    return 3;
+                case BreakpointType.Terminate:
+                    machine.DebugWrite("Terminate Breakpoint encountered.");
+                    return 2;
+                default:
+                    machine.DebugWrite("Invalid breakpoint encountered");
+                    return 1;
+            }
+
         }
     }
 }

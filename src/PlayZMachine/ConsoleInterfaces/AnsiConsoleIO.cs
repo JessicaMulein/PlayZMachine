@@ -12,7 +12,7 @@
     {
         public string? ReadLine()
         {
-            return AnsiConsole.Ask<string>(prompt: ">");
+            return AnsiConsole.Ask<string>(prompt: "");
         }
         public void Write(string str)
         {
