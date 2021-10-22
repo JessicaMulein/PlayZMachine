@@ -32,8 +32,8 @@ namespace PlayZMachine.Commands
                 io: io,
                 programFilename: Path.Combine(Directory.GetCurrentDirectory(), gameFile),
                 breakpointTypes: new BreakpointType[] { BreakpointType.InputRequired, BreakpointType.Terminate });
-            BreakpointType breakpoint = BreakpointType.None;
-            while (!machine.Finished && (breakpoint != BreakpointType.Terminate))
+            BreakpointType breakpointEncountered = BreakpointType.None;
+            while (!machine.Finished && (breakpointEncountered != BreakpointType.Terminate))
             {
                 // primarily stay in the status log
                 AnsiConsole.Status()
@@ -51,10 +51,10 @@ namespace PlayZMachine.Commands
                             machine.DebugWrite("" + machine.InstructionCounter + " : ");
 
                             ctx.Status($"i:{machine.InstructionCounter}> ");
-                            breakpoint = machine.processInstruction();
-                            if (breakpoint != BreakpointType.None)
+                            breakpointEncountered = machine.processInstruction();
+                            if (breakpointEncountered != BreakpointType.None)
                             {
-                                machine.DebugWrite($"Breakpoint reached: {breakpoint}");
+                                machine.DebugWrite($"Breakpoint reached: {breakpointEncountered}");
                                 // this may be an InputRequired for example
                                 // drop out of the loop to evaluate it
                                 break;
@@ -63,7 +63,7 @@ namespace PlayZMachine.Commands
                     });
 
                 // dropped out due to input required, breakpoint (future), or termination
-                switch (breakpoint)
+                switch (breakpointEncountered)
                 {
                     case BreakpointType.None:
                         // no break occurred, resume normal operation
@@ -75,7 +75,7 @@ namespace PlayZMachine.Commands
                         machine.BreakAfter = Math.Max(
                             machine.BreakAfter,
                             machine.InstructionCounter + 1);
-                        breakpoint = machine.processInstruction();
+                        breakpointEncountered = machine.processInstruction();
                         break;
                     case BreakpointType.Terminate:
                         machine.DebugWrite("Terminate Breakpoint encountered.");
