@@ -4,5 +4,6 @@
     {
         Zork1,
         Hitchhiker,
+        Endless,
     }
 }

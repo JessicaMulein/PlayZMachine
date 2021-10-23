@@ -2,7 +2,6 @@
 {
     using PlayZMachine.Maps;
     using System;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Tweetinvi;
     using Tweetinvi.Models;
@@ -14,11 +13,11 @@
 
         private IAuthenticatedUser? authenticatedUser;
 
-        
+
 
         public ZorkBotService()
         {
-            userClient = new TwitterClient(
+            this.userClient = new TwitterClient(
                 consumerKey: "CONSUMER_KEY",
                 consumerSecret: "CONSUMER_SECRET",
                 accessToken: "ACCESS_TOKEN",
@@ -27,32 +26,32 @@
 
         public async Task<IAuthenticatedUser?> Login()
         {
-            authenticatedUser = await userClient.Users
+            this.authenticatedUser = await this.userClient.Users
                 .GetAuthenticatedUserAsync()
                 .ConfigureAwait(false);
-            return authenticatedUser;
+            return this.authenticatedUser;
         }
 
         public async Task<ITweet?> Tweet(string content)
         {
-            if (authenticatedUser is null)
+            if (this.authenticatedUser is null)
             {
                 throw new Exception("must be logged in");
             }
 
-            return await userClient.Tweets
+            return await this.userClient.Tweets
                 .PublishTweetAsync(content)
                 .ConfigureAwait(false);
         }
 
         public async Task Subscribe(string environment)
         {
-            if (authenticatedUser is null)
+            if (this.authenticatedUser is null)
             {
                 throw new Exception("must be logged in");
             }
 
-            await userClient.AccountActivity
+            await this.userClient.AccountActivity
                 .SubscribeToAccountActivityAsync(
                     environment: environment)
                 .ConfigureAwait(false);
@@ -60,15 +59,15 @@
 
         public async Task Unsubscribe(string environment = "sandbox")
         {
-            if (authenticatedUser is null)
+            if (this.authenticatedUser is null)
             {
                 throw new Exception("must be logged in");
             }
 
-            await userClient.AccountActivity
+            await this.userClient.AccountActivity
                 .UnsubscribeFromAccountActivityAsync(
                     environment: environment,
-                    userId: authenticatedUser.Id)
+                    userId: this.authenticatedUser.Id)
                 .ConfigureAwait(false);
         }
 
@@ -79,13 +78,13 @@
                 throw new ArgumentException(nameof(game));
             }
 
-            (string file, string description) = GameMap.Map[game];
+            (string fileName, string description, int zmachineVersion) = GameMap.Map[game];
 
             StaticIO io = new StaticIO(initialInput: initialInput);
             Machine machine = (state is null)
                 ? new Machine(
                     io: io,
-                    programFilename: file)
+                    programFilename: fileName)
                 : new Machine(
                     io: io,
                     initialState: state);

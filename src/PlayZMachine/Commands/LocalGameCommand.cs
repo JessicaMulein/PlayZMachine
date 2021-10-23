@@ -1,14 +1,14 @@
 ﻿
 namespace PlayZMachine.Commands
 {
+    using PlayZMachine.ConsoleInterfaces;
+    using PlayZMachine.Maps;
     using Spectre.Console;
     using Spectre.Console.Cli;
-    using PlayZMachine.Maps;
-    using static Spectre.Console.SelectionPromptExtensions;
     using zmachine.Library;
-    using System.Diagnostics;
-    using PlayZMachine.ConsoleInterfaces;
     using zmachine.Library.Enumerations;
+    using zmachine.Library.Models;
+    using static Spectre.Console.SelectionPromptExtensions;
 
     public class LocalGameCommand : Command
     {
@@ -16,33 +16,37 @@ namespace PlayZMachine.Commands
         {
             AnsiConsole.MarkupLine("[underline red]ZorkBot[/] Welcome to an implementation of the Infocom Z-machine based largely on Mark's!");
 
-            var prompt = new SelectionPrompt<string>();
+            SelectionPrompt<string>? prompt = new SelectionPrompt<string>();
             prompt
                     .Title("Games [green]available[/]?")
                     .PageSize(10)
                     .MoreChoicesText("[grey](Move up and down to reveal more games)[/]");
             foreach (Game gameValue in Enum.GetValues(typeof(Game)))
             {
-                var choice = prompt.AddChoice(GameMap.Map[gameValue].Item1);
+                if (!GameMap.Map.ContainsKey(gameValue) || GameMap.Map[gameValue].zmachineVersion > Machine.CurrentVersion)
+                {
+                    continue;
+                }
+                ISelectionItem<string>? choice = prompt.AddChoice(GameMap.Map[gameValue].fileName);
             }
-            var gameFile = AnsiConsole.Prompt<string>(prompt: prompt);
+            string? gameFile = AnsiConsole.Prompt<string>(prompt: prompt);
 
             AnsiConsoleIO io = new AnsiConsoleIO();
             Machine machine = new Machine(
                 io: io,
                 programFilename: Path.Combine(Directory.GetCurrentDirectory(), gameFile),
-                breakpointTypes: new BreakpointType[] { BreakpointType.Terminate });
+                breakpointTypes: new BreakpointType[] { });
+
             BreakpointType breakpointEncountered = BreakpointType.None;
-            while (!machine.Finished && (breakpointEncountered != BreakpointType.Terminate))
+            while (!machine.Finished)
             {
                 machine.DebugWrite("" + machine.InstructionCounter + " : ");
 
-                breakpointEncountered = machine.processInstruction();
+                InstructionInfo instructionInfo = machine.processInstruction();
+                breakpointEncountered = instructionInfo.BreakpointType;
                 if (breakpointEncountered != BreakpointType.None)
                 {
                     machine.DebugWrite($"Breakpoint reached: {breakpointEncountered}");
-                    // this may be an InputRequired for example
-                    // drop out of the loop to evaluate it
                     break;
                 }
             }
@@ -51,12 +55,14 @@ namespace PlayZMachine.Commands
             switch (breakpointEncountered)
             {
                 case BreakpointType.None:
-                    // no break occurred, resume normal operation
+                    // no break occurred
+                    return 0;
+                case BreakpointType.Complete:
                     return 0;
                 case BreakpointType.InputRequired:
                     // previously this was used to break out of a status loop, but we should not be breaking for input any longer
                     machine.IO.WriteLine("Input required breakpoint reached unexpectedly");
-                    return 3;
+                    return 4;
                 case BreakpointType.Terminate:
                     machine.DebugWrite("Terminate Breakpoint encountered.");
                     return 2;
