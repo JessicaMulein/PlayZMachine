@@ -35,7 +35,7 @@ namespace PlayZMachine.Commands
             Machine machine = new Machine(
                 io: io,
                 programFilename: Path.Combine(Directory.GetCurrentDirectory(), gameFile),
-                breakpointTypes: new BreakpointType[] { });
+                breakpointTypes: new Dictionary<BreakpointType,BreakpointAction> { });
 
             BreakpointType breakpointEncountered = BreakpointType.None;
             while (!machine.Finished)
