@@ -11,3 +11,7 @@ C# Z-Machine implementation with Twitter bot, Diamond/BitClout bot and local con
 - Copy game files into src/PlayZMachine (ZORK1.DAT, etc)
 - dotnet build
 - ./bin/Debug/net6.0/PlayZMachine.exe local # (etc)
+
+# Future
+- AI map and scene image illustration generation
+ - https://twitter.com/underwaytrying/status/1451748859890180102?s=20
