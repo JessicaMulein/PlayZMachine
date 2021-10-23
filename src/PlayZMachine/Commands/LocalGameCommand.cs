@@ -7,6 +7,7 @@ namespace PlayZMachine.Commands
     using Spectre.Console.Cli;
     using zmachine.Library;
     using zmachine.Library.Enumerations;
+    using zmachine.Library.Models;
     using static Spectre.Console.SelectionPromptExtensions;
 
     public class LocalGameCommand : Command
@@ -41,7 +42,8 @@ namespace PlayZMachine.Commands
             {
                 machine.DebugWrite("" + machine.InstructionCounter + " : ");
 
-                breakpointEncountered = machine.processInstruction(out Enum? opcodeType);
+                InstructionInfo instructionInfo = machine.processInstruction();
+                breakpointEncountered = instructionInfo.BreakpointType;
                 if (breakpointEncountered != BreakpointType.None)
                 {
                     machine.DebugWrite($"Breakpoint reached: {breakpointEncountered}");
