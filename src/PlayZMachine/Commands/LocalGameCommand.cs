@@ -41,7 +41,7 @@ namespace PlayZMachine.Commands
             {
                 machine.DebugWrite("" + machine.InstructionCounter + " : ");
 
-                breakpointEncountered = machine.processInstruction();
+                breakpointEncountered = machine.processInstruction(out Enum? opcodeType);
                 if (breakpointEncountered != BreakpointType.None)
                 {
                     machine.DebugWrite($"Breakpoint reached: {breakpointEncountered}");
