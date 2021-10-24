@@ -1,4 +1,6 @@
-﻿namespace PlayZMachine.Maps;
+﻿using PlayZMachine.Enumerations;
+
+namespace PlayZMachine.Maps;
 
 public static class GameMap
 {

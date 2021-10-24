@@ -16,7 +16,7 @@ internal class Program
 
     private static async Task Main(string[] args)
     {
-        CommandApp? app = new CommandApp();
+        CommandApp app = new CommandApp();
         app.Configure(config =>
         {
 #if DEBUG

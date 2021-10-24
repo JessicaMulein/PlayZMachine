@@ -1,4 +1,5 @@
 ﻿using PlayZMachine.ConsoleInterfaces;
+using PlayZMachine.Enumerations;
 using PlayZMachine.Maps;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -14,7 +15,7 @@ public class LocalGameCommand : Command
         AnsiConsole.MarkupLine(
             "[underline red]ZorkBot[/] Welcome to an implementation of the Infocom Z-machine based largely on Mark's!");
 
-        SelectionPrompt<string>? prompt = new SelectionPrompt<string>();
+        SelectionPrompt<string> prompt = new SelectionPrompt<string>();
         prompt
             .Title("Games [green]available[/]?")
             .PageSize(10)
@@ -27,13 +28,13 @@ public class LocalGameCommand : Command
                 continue;
             }
 
-            ISelectionItem<string>? choice = prompt.AddChoice(GameMap.Map[gameValue].fileName);
+            ISelectionItem<string> choice = prompt.AddChoice(GameMap.Map[gameValue].fileName);
         }
 
-        string? gameFile = AnsiConsole.Prompt(prompt);
+        string gameFile = AnsiConsole.Prompt(prompt);
 
-        AnsiConsoleIO? io = new AnsiConsoleIO();
-        Machine? machine = new Machine(
+        AnsiConsoleIO io = new AnsiConsoleIO();
+        Machine machine = new Machine(
             io,
             Path.Combine(Directory.GetCurrentDirectory(), gameFile),
             new Dictionary<BreakpointType, BreakpointAction>());
@@ -43,7 +44,7 @@ public class LocalGameCommand : Command
         {
             machine.DebugWrite("" + machine.InstructionCounter + " : ");
 
-            zmachine.Library.Models.InstructionInfo? instructionInfo = machine.processInstruction();
+            zmachine.Library.Models.InstructionInfo instructionInfo = machine.processInstruction();
             breakpointEncountered = instructionInfo.BreakpointType;
             if (breakpointEncountered != BreakpointType.None)
             {

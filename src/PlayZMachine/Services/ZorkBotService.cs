@@ -1,4 +1,5 @@
-﻿using PlayZMachine.Maps;
+﻿using PlayZMachine.Enumerations;
+using PlayZMachine.Maps;
 using Tweetinvi;
 using Tweetinvi.Models;
 using zmachine.Library;
@@ -77,8 +78,8 @@ public class ZorkBotService
 
         (string? fileName, string? description, int zmachineVersion) = GameMap.Map[game];
 
-        StaticIO? io = new StaticIO(initialInput);
-        Machine? machine = state is null
+        StaticIO io = new StaticIO(initialInput);
+        Machine machine = state is null
             ? new Machine(
                 io,
                 fileName)

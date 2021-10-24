@@ -1,8 +1,10 @@
-﻿namespace PlayZMachine;
-
-public enum Game
+﻿namespace PlayZMachine.Enumerations
 {
-    Zork1,
-    Hitchhiker,
-    Endless
+
+    public enum Game
+    {
+        Zork1,
+        Hitchhiker,
+        Endless
+    }
 }
