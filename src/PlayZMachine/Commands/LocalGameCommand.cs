@@ -62,15 +62,23 @@ namespace PlayZMachine.Commands
                 case BreakpointType.InputRequired:
                     // previously this was used to break out of a status loop, but we should not be breaking for input any longer
                     machine.IO.WriteLine("Input required breakpoint reached unexpectedly");
+                    return 6;
+                case BreakpointType.DivisionByZero:
+                    machine.DebugWrite("Division by zero.");
+                    return 5;
+                case BreakpointType.Error:
+                    machine.DebugWrite("Unhandled error encountered.");
                     return 4;
+                case BreakpointType.Unimplemented:
+                    machine.DebugWrite("Requied but unimplemented opcode encountered.");
+                    return 3;
                 case BreakpointType.Terminate:
                     machine.DebugWrite("Terminate Breakpoint encountered.");
                     return 2;
                 default:
                     machine.DebugWrite("Invalid breakpoint encountered");
-                    return 1;
+                    return 255;
             }
-
         }
     }
 }
