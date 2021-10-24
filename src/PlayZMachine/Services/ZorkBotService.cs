@@ -1,97 +1,93 @@
-﻿namespace PlayZMachine.Services
+﻿using PlayZMachine.Maps;
+using Tweetinvi;
+using Tweetinvi.Models;
+using zmachine.Library;
+
+namespace PlayZMachine.Services;
+
+public class ZorkBotService
 {
-    using PlayZMachine.Maps;
-    using System;
-    using System.Threading.Tasks;
-    using Tweetinvi;
-    using Tweetinvi.Models;
-    using zmachine.Library;
+    private readonly TwitterClient userClient;
 
-    public class ZorkBotService
+    private IAuthenticatedUser? authenticatedUser;
+
+
+    public ZorkBotService()
     {
-        private readonly TwitterClient userClient;
+        this.userClient = new TwitterClient(
+            "CONSUMER_KEY",
+            "CONSUMER_SECRET",
+            "ACCESS_TOKEN",
+            "ACCESS_TOKEN_SECRET");
+    }
 
-        private IAuthenticatedUser? authenticatedUser;
+    public async Task<IAuthenticatedUser?> Login()
+    {
+        this.authenticatedUser = await this.userClient.Users
+            .GetAuthenticatedUserAsync()
+            .ConfigureAwait(false);
+        return this.authenticatedUser;
+    }
 
-
-
-        public ZorkBotService()
+    public async Task<ITweet?> Tweet(string content)
+    {
+        if (this.authenticatedUser is null)
         {
-            this.userClient = new TwitterClient(
-                consumerKey: "CONSUMER_KEY",
-                consumerSecret: "CONSUMER_SECRET",
-                accessToken: "ACCESS_TOKEN",
-                accessSecret: "ACCESS_TOKEN_SECRET");
+            throw new Exception("must be logged in");
         }
 
-        public async Task<IAuthenticatedUser?> Login()
+        return await this.userClient.Tweets
+            .PublishTweetAsync(content)
+            .ConfigureAwait(false);
+    }
+
+    public async Task Subscribe(string environment)
+    {
+        if (this.authenticatedUser is null)
         {
-            this.authenticatedUser = await this.userClient.Users
-                .GetAuthenticatedUserAsync()
-                .ConfigureAwait(false);
-            return this.authenticatedUser;
+            throw new Exception("must be logged in");
         }
 
-        public async Task<ITweet?> Tweet(string content)
-        {
-            if (this.authenticatedUser is null)
-            {
-                throw new Exception("must be logged in");
-            }
+        await this.userClient.AccountActivity
+            .SubscribeToAccountActivityAsync(
+                environment)
+            .ConfigureAwait(false);
+    }
 
-            return await this.userClient.Tweets
-                .PublishTweetAsync(content)
-                .ConfigureAwait(false);
+    public async Task Unsubscribe(string environment = "sandbox")
+    {
+        if (this.authenticatedUser is null)
+        {
+            throw new Exception("must be logged in");
         }
 
-        public async Task Subscribe(string environment)
-        {
-            if (this.authenticatedUser is null)
-            {
-                throw new Exception("must be logged in");
-            }
+        await this.userClient.AccountActivity
+            .UnsubscribeFromAccountActivityAsync(
+                environment,
+                this.authenticatedUser.Id)
+            .ConfigureAwait(false);
+    }
 
-            await this.userClient.AccountActivity
-                .SubscribeToAccountActivityAsync(
-                    environment: environment)
-                .ConfigureAwait(false);
+    public async Task<string> Iterate(Game game, CPUState? state, string? initialInput = null, bool untilInput = true)
+    {
+        if (!GameMap.Map.ContainsKey(game))
+        {
+            throw new ArgumentException(nameof(game));
         }
 
-        public async Task Unsubscribe(string environment = "sandbox")
-        {
-            if (this.authenticatedUser is null)
-            {
-                throw new Exception("must be logged in");
-            }
+        (string? fileName, string? description, int zmachineVersion) = GameMap.Map[game];
 
-            await this.userClient.AccountActivity
-                .UnsubscribeFromAccountActivityAsync(
-                    environment: environment,
-                    userId: this.authenticatedUser.Id)
-                .ConfigureAwait(false);
-        }
+        StaticIO? io = new StaticIO(initialInput);
+        Machine? machine = state is null
+            ? new Machine(
+                io,
+                fileName)
+            : new Machine(
+                io,
+                state);
 
-        public async Task<string> Iterate(Game game, CPUState? state, string? initialInput = null, bool untilInput = true)
-        {
-            if (!GameMap.Map.ContainsKey(game))
-            {
-                throw new ArgumentException(nameof(game));
-            }
+        machine.processInstruction();
 
-            (string fileName, string description, int zmachineVersion) = GameMap.Map[game];
-
-            StaticIO io = new StaticIO(initialInput: initialInput);
-            Machine machine = (state is null)
-                ? new Machine(
-                    io: io,
-                    programFilename: fileName)
-                : new Machine(
-                    io: io,
-                    initialState: state);
-
-            machine.processInstruction();
-
-            throw new NotImplementedException();
-        }
+        throw new NotImplementedException();
     }
 }

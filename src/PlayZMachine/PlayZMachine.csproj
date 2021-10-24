@@ -1,21 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <StartupObject>PlayZMachine.Program</StartupObject>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <StartupObject>PlayZMachine.Program</StartupObject>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.FASTER.Core" Version="1.9.6" />
-    <PackageReference Include="Spectre.Console" Version="0.42.1-preview.0.3" />
-    <PackageReference Include="TweetinviAPI" Version="5.0.4" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.FASTER.Core" Version="1.9.6"/>
+        <PackageReference Include="Spectre.Console" Version="0.42.1-preview.0.3"/>
+        <PackageReference Include="TweetinviAPI" Version="5.0.4"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Z-Machine\Build1\zmachine.Library\zmachine.Library.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Z-Machine\Build1\zmachine.Library\zmachine.Library.csproj"/>
+    </ItemGroup>
 
 </Project>

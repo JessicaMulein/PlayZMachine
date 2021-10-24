@@ -1,9 +1,8 @@
-﻿namespace PlayZMachine
+﻿namespace PlayZMachine;
+
+public enum Game
 {
-    public enum Game
-    {
-        Zork1,
-        Hitchhiker,
-        Endless,
-    }
+    Zork1,
+    Hitchhiker,
+    Endless
 }

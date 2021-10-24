@@ -1,31 +1,32 @@
-﻿namespace PlayZMachine.ConsoleInterfaces
-{
-    using Spectre.Console;
-    using System;
-    using zmachine.Library;
+﻿using Spectre.Console;
+using zmachine.Library;
 
-    internal class AnsiConsoleIO : IIO
+namespace PlayZMachine.ConsoleInterfaces;
+
+internal class AnsiConsoleIO : IIO
+{
+    public string? ReadLine()
     {
-        public string? ReadLine()
-        {
-            return AnsiConsole.Ask<string>(prompt: "");
-        }
-        public void Write(string str)
-        {
-            AnsiConsole.Markup(str);
-        }
-        public void WriteLine(string str)
-        {
-            AnsiConsole.MarkupLine(str);
-        }
-        /// <summary>
-        /// Translate stored byte into key code/key press
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public System.ConsoleKeyInfo ReadKey()
-        {
-            return Console.ReadKey(true);
-        }
+        return AnsiConsole.Ask<string>("");
+    }
+
+    public void Write(string str)
+    {
+        AnsiConsole.Markup(str);
+    }
+
+    public void WriteLine(string str)
+    {
+        AnsiConsole.MarkupLine(str);
+    }
+
+    /// <summary>
+    ///     Translate stored byte into key code/key press
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public ConsoleKeyInfo ReadKey()
+    {
+        return Console.ReadKey(true);
     }
 }

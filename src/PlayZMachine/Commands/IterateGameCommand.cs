@@ -1,13 +1,11 @@
-﻿
-namespace PlayZMachine.Commands
-{
-    using Spectre.Console.Cli;
+﻿using Spectre.Console.Cli;
 
-    public class IterateGameCommand : Command
+namespace PlayZMachine.Commands;
+
+public class IterateGameCommand : Command
+{
+    public override int Execute(CommandContext context)
     {
-        public override int Execute(CommandContext context)
-        {
-            return 1;
-        }
+        return 1;
     }
 }
