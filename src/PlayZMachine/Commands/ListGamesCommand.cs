@@ -2,7 +2,7 @@
 using PlayZMachine.Maps;
 using Spectre.Console;
 using Spectre.Console.Cli;
-using zmachine.Library;
+using zmachine.Library.Models;
 
 namespace PlayZMachine.Commands;
 

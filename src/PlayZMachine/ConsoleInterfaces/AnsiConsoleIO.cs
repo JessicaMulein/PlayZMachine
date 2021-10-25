@@ -1,5 +1,5 @@
 ﻿using Spectre.Console;
-using zmachine.Library;
+using zmachine.Library.Interfaces;
 
 namespace PlayZMachine.ConsoleInterfaces;
 

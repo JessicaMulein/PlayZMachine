@@ -2,7 +2,8 @@
 using PlayZMachine.Maps;
 using Tweetinvi;
 using Tweetinvi.Models;
-using zmachine.Library;
+using zmachine.Library.Models;
+using zmachine.Library.Models.IO;
 
 namespace PlayZMachine.Services;
 
