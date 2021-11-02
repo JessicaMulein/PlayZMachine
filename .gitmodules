@@ -4,3 +4,6 @@
 [submodule "resources/zmachine"]
 	path = resources/zmachine
 	url = git@github.com:jeffnyman/zmachine.git
+[submodule "src/frotzcore"]
+	path = src/frotzcore
+	url = git@github.com:JessicaMulein/frotzcore.git
